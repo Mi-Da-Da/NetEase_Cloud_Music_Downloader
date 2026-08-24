@@ -1,0 +1,5 @@
+selenium>=4.0.0
+requests>=2.28.0
+PyExecJS>=1.5.1
+tqdm>=4.64.0
+webdrivermanager_cn>=0.10.0

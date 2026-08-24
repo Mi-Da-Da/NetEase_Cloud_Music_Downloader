@@ -1,7 +1,7 @@
 import requests
 import re
 import os
-from 网易云音乐.core.encrypt import get_music_url
+from core.encrypt import get_music_url
 
 MUSIC_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "music")
 

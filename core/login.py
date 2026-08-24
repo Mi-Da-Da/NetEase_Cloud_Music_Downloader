@@ -92,12 +92,13 @@ def login(driver, url, timeout=60):
             music_u = driver.get_cookie("MUSIC_U")
             if music_u:
                 print("Cookie登录成功")
+                home_url = None
                 try:
                     user_link = driver.find_element(By.CSS_SELECTOR, "#g-topbar .m-top .wrap .m-tophead a.name")
                     home_url = user_link.get_attribute("href")
-                    return True, home_url
-                except:
-                    pass
+                except Exception as e:
+                    print(f"未找到用户主页链接（不影响登录）: {e}")
+                return True, home_url
             else:
                 print("Cookie已失效")
         except Exception as e:
@@ -122,18 +123,24 @@ def login(driver, url, timeout=60):
             if music_u:
                 print("登录成功")
                 cookies = driver.get_cookies()
-                with open(cookie_path, "w", encoding="utf-8") as f:
-                    json.dump(cookies, f, ensure_ascii=False, indent=2)
-                print("Cookie已保存")
+                try:
+                    os.makedirs(os.path.dirname(cookie_path), exist_ok=True)
+                    with open(cookie_path, "w", encoding="utf-8") as f:
+                        json.dump(cookies, f, ensure_ascii=False, indent=2)
+                    print("Cookie已保存")
+                except Exception as e:
+                    print(f"Cookie保存失败: {e}")
                 driver.refresh()
                 time.sleep(3)
+                home_url = None
                 try:
                     user_link = driver.find_element(By.CSS_SELECTOR, "#g-topbar .m-top .wrap .m-tophead a.name")
                     home_url = user_link.get_attribute("href")
-                    return True, home_url
-                except:
-                    pass
-        except:
+                except Exception as e:
+                    print(f"未找到用户主页链接（不影响登录）: {e}")
+                return True, home_url
+        except Exception as e:
+            print(f"登录检测异常: {e}")
             pass
         time.sleep(1)
         print(".", end="", flush=True)
